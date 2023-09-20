@@ -208,10 +208,18 @@ void paintExtendedImage(
   }
   bool hasEditAction = false;
   if (editActionDetails != null) {
+    Rect deflated = editActionDetails.cropRectPadding!.deflateRect(rect);
+    const double minimumWorkingDouble = 0.000000000001;
+    if(inputSize.width > inputSize.height) {
+      deflated = Rect.fromLTWH(deflated.left, deflated.top, deflated.width + minimumWorkingDouble, deflated.height);
+    }
+    if(inputSize.height > inputSize.width) {
+      deflated = Rect.fromLTWH(deflated.left, deflated.top, deflated.width, deflated.height + minimumWorkingDouble);
+    }
     if (editActionDetails.cropRectPadding != null) {
       destinationRect = getDestinationRect(
           inputSize: inputSize,
-          rect: editActionDetails.cropRectPadding!.deflateRect(rect),
+          rect: deflated,
           fit: fit,
           flipHorizontally: false,
           scale: scale,
